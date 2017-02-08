@@ -71,7 +71,7 @@ public class Robot extends IterativeRobot {
 			if (relay.relay == null)
 			{
 			    log("relay.relay is null, dammit");
-				SmartDashboard.putString("Relay", "null as hell");
+				SmartDashboard.putString("Relay", "null as heck");
 			}
 			else
 			{
