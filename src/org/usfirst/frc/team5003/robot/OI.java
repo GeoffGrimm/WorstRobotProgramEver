@@ -12,14 +12,14 @@ public class OI {
 	
 	public OI() {
 			
-		SmartDashboard.putData("Talkative", new TalkativeCommand());
+		SmartDashboard.putData("TalkativeCommand", new TalkativeCommand());
 		SmartDashboard.putData("Network Table Test", new NetworkTableTest());
 
 		if (Robot.accel != null)
-			SmartDashboard.putData("Accel", new BuiltInAccelerometerQuery());
+			SmartDashboard.putData("AccelQuery", new BuiltInAccelerometerQuery());
 		
-		//if (Robot.gyro != null)
-			SmartDashboard.putData("Gyro", new GyroQuery());
+		if (Robot.gyro != null)
+			SmartDashboard.putData("GyroQuery", new GyroQuery());
 		
 		if (Robot.relay != null){
 			SmartDashboard.putData("Relay Forward", new RelayCommand(Value.kForward));
@@ -38,7 +38,7 @@ public class OI {
 		}
 		
 		if (Robot.talon != null && Robot.joystick != null)
-			SmartDashboard.putData("Accel", new RunTalonWithJoystick());
+			//SmartDashboard.putData("TalonWithJoystick", new RunTalonWithJoystick());
 
 		//if (Robot.drivetrain != null && Robot.joystick != null)
 			//SmartDashboard.putData("Drive", new DriveWithJoystickCommand());

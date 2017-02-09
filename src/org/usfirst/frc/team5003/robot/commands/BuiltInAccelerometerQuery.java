@@ -35,7 +35,7 @@ public class BuiltInAccelerometerQuery extends Command {
     		String msg = String.format("%10.6f %10.6f %10.6f %10.6f", aX, aY, aZ, angleZ);
     		
     		System.out.println(msg);
-    		SmartDashboard.putString("Accel:", msg);
+    		//SmartDashboard.putString("Accel:", msg);
     	}
     	if (now - start > 30000)
     		done = true;

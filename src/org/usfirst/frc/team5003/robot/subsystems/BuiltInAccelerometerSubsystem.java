@@ -33,7 +33,7 @@ public class BuiltInAccelerometerSubsystem extends Subsystem {
     		   aY = accel.getY(), 
     		   aZ = accel.getZ();
     	double aTot = Math.sqrt(aX*aX + aY*aY + aZ*aZ);
-    	double angleZ = Math.acos(aZ / aTot);
+    	double angleZ = (180 * Math.acos(aZ / aTot))/ 3.14159;
     	return angleZ;
     }
 }
