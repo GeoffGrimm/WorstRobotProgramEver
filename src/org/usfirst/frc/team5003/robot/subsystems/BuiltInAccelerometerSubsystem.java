@@ -7,9 +7,19 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class BuiltInAccelerometerSubsystem extends Subsystem {
 
     private BuiltInAccelerometer accel;
+    public Boolean isGood = false;
     
     public BuiltInAccelerometerSubsystem(){
-    	accel = new BuiltInAccelerometer(Accelerometer.Range.k4G);   
+    	isGood = false;
+    	try{
+    		accel = new BuiltInAccelerometer(Accelerometer.Range.k4G);   
+    		accel.getX();
+    	}
+    	catch (Exception ex){
+    		accel = null;
+    	}
+    	if (accel != null)
+    		isGood = true;
     }
     
     public void initDefaultCommand() {

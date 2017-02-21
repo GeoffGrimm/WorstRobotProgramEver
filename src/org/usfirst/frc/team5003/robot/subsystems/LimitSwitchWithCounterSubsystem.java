@@ -8,10 +8,22 @@ public class LimitSwitchWithCounterSubsystem extends Subsystem {
 
 	private DigitalInput limitSwitch;
 	private Counter counter;
+	public Boolean isGood = false;
 	
 	public LimitSwitchWithCounterSubsystem(){
-		limitSwitch = new DigitalInput(1);
-		counter = new Counter(limitSwitch);
+		isGood = false;
+		try{
+			limitSwitch = new DigitalInput(5);
+			counter = new Counter(limitSwitch);
+			limitSwitch.get();
+			counter.get();
+		}
+		catch (Exception ex){
+			limitSwitch = null;
+			counter = null;
+		}
+		if (limitSwitch != null && counter != null)
+			isGood = true;
 	}
 
     public void initDefaultCommand() {

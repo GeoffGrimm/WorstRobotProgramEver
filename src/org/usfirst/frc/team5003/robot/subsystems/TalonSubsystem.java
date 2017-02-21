@@ -6,9 +6,19 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class TalonSubsystem extends Subsystem {
 
 	private Talon talon;
+	public Boolean isGood = false;
 
     public TalonSubsystem(){
-    	talon = new Talon(4);
+    	isGood = false;
+    	try{
+    		talon = new Talon(4);
+    		talon.stopMotor();
+    	}
+    	catch (Exception ex){
+    		talon = null;
+    	}
+    	if (talon != null)
+    		isGood = true;
     }
     
     public void initDefaultCommand() {

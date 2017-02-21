@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.Joystick;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 
 public class Robot extends IterativeRobot {
@@ -27,13 +28,14 @@ public class Robot extends IterativeRobot {
 	public static ServoSubsystem servo;
 	public static TalonSubsystem talon;
 	
-	//public static DrivetrainSubsystem drivetrain;
+	public static DrivetrainSubsystem drivetrain;
 	public static LimitSwitchWithCounterSubsystem limitSwitchWithCounter;
 	
 	public static Joystick joystick;
 	
-	SendableChooser<Command> chooser;
 	
+	SendableChooser<Object> objectChooser;
+	SendableChooser<String> stringChooser;
 	
 	//CameraServer.getInstance().startAutomaticCapture();
 	//UsbCamera usbCamera = new UsbCamera("USB Camera 0", 0);
@@ -43,123 +45,49 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void robotInit() {	
-		accel = null;
-		try
-		{
-			accel = new BuiltInAccelerometerSubsystem();
-			SmartDashboard.putString("AccelStatus", "ok");
-		}
-		catch (Exception ex)
-		{
-			SmartDashboard.putString("AccelStatus", "*** bad ***");
-		}
 		
-		gyro = null;
-		try
-		{
-			//gyro = new GyroSubsystem();
-			SmartDashboard.putString("GyroStatus", "commentedout");
-		}
-		catch (Exception ex)
-		{
-			SmartDashboard.putString("GyroStatus", "*** bad ***");
-		}
-
-		relay = null;
-		try
-		{
-			relay = new RelaySubsystem();
-			if (relay.relay == null)
-			{
-			    log("relay.relay is null, dammit");
-				SmartDashboard.putString("RelayStatus", "null as heck");
-			}
-			else
-			{
-				log("relay is OK!!");
-				SmartDashboard.putString("RelayStatus", "ok");
-			}
-		}
-		catch (Exception ex)
-		{
-			SmartDashboard.putString("RelayStatus", "*** bad ***");
-		}
-
-		servo = null;
-		try
-		{
-			servo = new ServoSubsystem();
-			SmartDashboard.putString("ServoStatus", "ok");
-		}
-		catch (Exception ex)
-		{
-			SmartDashboard.putString("ServoStatus", "*** bad ***");
-		}
-
-		talon = null;
-		try
-		{
-			talon = new TalonSubsystem();
-			SmartDashboard.putString("TalonStatus", "ok");
-		}
-		catch (Exception ex)
-		{
-			SmartDashboard.putString("TalonStatus", "*** bad ***");
-		}
+		accel = new BuiltInAccelerometerSubsystem();
+		//gyro = new GyroSubsystem();
+		servo = new ServoSubsystem();
+		relay = new RelaySubsystem();
+		talon = new TalonSubsystem();
+		limitSwitchWithCounter =  new LimitSwitchWithCounterSubsystem();
+		drivetrain = new DrivetrainSubsystem();
+	
+		joystick = new Joystick(0);
 		
-		//drivetrain = null;
-		try
+		/*try
 		{
-			//drivetrain = new DrivetrainSubsystem();
-			SmartDashboard.putString("DrivetrainStatus", "commented out");
-		}
-		catch (Exception ex)
-		{
-			SmartDashboard.putString("DrivetrainStatus", "*** bad ***");
-		}
-		
-		limitSwitchWithCounter = null;
-		try
-		{
-			limitSwitchWithCounter = new LimitSwitchWithCounterSubsystem();
-			SmartDashboard.putString("LimitSwitchWithCounterStatus", "ok");
-		}
-		catch (Exception ex)
-		{
-			SmartDashboard.putString("LimitSwitchWithCounterStatus", "*** bad ***");
-		}
-		
-		joystick = null;
-		try
-		{
-			//joystick = new Joystick(0);
-			SmartDashboard.putString("JoystickStatus", "commentedout");
-		}
-		catch (Exception ex)
-		{
-			SmartDashboard.putString("JoystickStatus", "*** bad ***");
-		}
-		
-		try
-		{
-			//UsbCamera usbCamera = CameraServer.getInstance().startAutomaticCapture();
-			//usbCamera.setFPS(15);
-			//usbCamera.setResolution(320,240);
-			SmartDashboard.putString("CameraStatus", "commentedout");
+			UsbCamera usbCamera = CameraServer.getInstance().startAutomaticCapture();
+			usbCamera.setFPS(15);
+			usbCamera.setResolution(320,240);
+			SmartDashboard.putString("CameraStatus", "seems ok");
 		}
 		catch (Exception ex)
 		{
 			SmartDashboard.putString("CameraStatus", "*** bad ***");
-		}
+		}*/
 		
 		oi = new OI();
 		
-		chooser = new SendableChooser<>();
-		chooser.addDefault("Center", new ConfigurableAutonomousCommand("Center"));
-		chooser.addDefault("Left", new ConfigurableAutonomousCommand("Left"));
-		chooser.addDefault("Right", new ConfigurableAutonomousCommand("Right"));
+	
+		objectChooser = new SendableChooser<>();
+		objectChooser.addDefault("number",  7);
+		objectChooser.addDefault("string", "sting as object");
+		objectChooser.addDefault("command", new ConfigurableTalkativeCommand("Center"));
 		
-		SmartDashboard.putData("Auto mode", chooser);
+		stringChooser = new SendableChooser<String>();
+		stringChooser.addDefault("none", "none");
+		stringChooser.addObject("Left",  "Left");
+		stringChooser.addObject("Straight",  "Straight");
+		stringChooser.addObject("Right",  "Right");
+		SmartDashboard.putData("AutonoumosChoo0ser", stringChooser);
+		
+		//SmartDashboard.putData("Object Chooser", objectChooser);
+		
+		//SmartDashboard.putNumber("NumberPicker", 1.00);
+		
+		
 	}
 
 	/**
@@ -190,9 +118,31 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		autonomousCommand = chooser.getSelected();
+		//autonomousCommand = chooser.getSelected();
 		if (autonomousCommand != null)
 			autonomousCommand.start();
+		
+		Object obj = objectChooser.getSelected();
+		if (obj instanceof String)
+		{
+			System.out.println("You picked a string");
+		}
+		else if (obj instanceof Integer)
+		{
+			System.out.println("you picked an int");
+		}
+		else if (obj instanceof Command)
+		{
+			System.out.println("That was a command");
+		}
+		
+		double val = SmartDashboard.getNumber("NumberPicker", 0);
+		
+		String mode = stringChooser.getSelected().toLowerCase();
+		if (mode.equals("right")){
+		}
+		System.out.println(val);
+		
 	}
 
 	@Override
@@ -209,6 +159,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
+		//Robot.drivetrain.tankDrive(0, 0);
 	}
 
 	@Override

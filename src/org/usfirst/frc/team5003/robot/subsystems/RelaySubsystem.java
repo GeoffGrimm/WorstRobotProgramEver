@@ -1,6 +1,5 @@
 package org.usfirst.frc.team5003.robot.subsystems;
 
-import org.usfirst.frc.team5003.robot.Robot;
 import org.usfirst.frc.team5003.robot.RobotSettings;
 
 import edu.wpi.first.wpilibj.Relay;
@@ -10,20 +9,20 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class RelaySubsystem extends Subsystem {
 
-	public Relay relay;
+	private Relay relay;
+	public Boolean isGood = false;
 
     public RelaySubsystem(){
-    	Robot.log("Relay constructor");
-    	relay = new Relay(RobotSettings.LED_LIGHTS_RELAY, Direction.kBoth);
-    	if (relay == null)
-    		Robot.log("*** Relay is null after constructor");
-    	else{
-    		Robot.log("Relay is not null!");
-    		if (!relay.isAlive())
-    			Robot.log("*** Relay is not alive");
-    		else
-    			Robot.log("Relay is alive!");
+    	isGood = false;
+    	try{
+    		relay = new Relay(RobotSettings.LED_LIGHTS_RELAY, Direction.kBoth);
+    		relay.get();
     	}
+    	catch (Exception ex){
+    		relay = null;
+    	}
+    	if (relay != null)
+    		isGood = true;
     }
 
     public void initDefaultCommand() {

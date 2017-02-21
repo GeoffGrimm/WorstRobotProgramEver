@@ -4,19 +4,21 @@ import org.usfirst.frc.team5003.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class DriveWithJoystickCommand extends Command {
+public class IdleDrivetrain extends Command {
 
-    public DriveWithJoystickCommand() {
-    	//if (Robot.drivetrain != null)
-    		//requires(Robot.drivetrain);
+    public IdleDrivetrain() {
+    	requires(Robot.drivetrain);
+    	Robot.drivetrain.tankDrive(0,0);
     }
 
     protected void initialize() {
+    	Robot.drivetrain.tankDrive(0,0);
     }
 
+    // default command for drivetrain subsystem, keeps watchdog timer happy
     protected void execute() {
-    	//Robot.drivetrain.arcadeDrive(Robot.joystick);
-    	}
+    	Robot.drivetrain.tankDrive(0,0);
+    }
 
     protected boolean isFinished() {
         return false;
